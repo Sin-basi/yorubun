@@ -8,11 +8,12 @@
 
    VERSION は中身を変えたら必ず上げる。上げないと古い shell が残る。 */
 
-const VERSION = "v1";
+const VERSION = "v2";
 const SHELL = `yorubun-shell-${VERSION}`;
 const CONTENT = `yorubun-content-${VERSION}`;
 const META = "yorubun-meta";           // contentVersion の控えを置くだけ
 
+/* content/vocab-used.txt は執筆用の控えで、app は読まない。ここには入れない。 */
 const SHELL_FILES = [
   "./",
   "index.html",

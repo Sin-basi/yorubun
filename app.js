@@ -107,12 +107,18 @@ const ARROW_L = '<svg width="15" height="15" viewBox="0 0 19 19" fill="none" str
 const ARROW_R = '<svg width="15" height="15" viewBox="0 0 19 19" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4.5 12.5 9.5l-5 5"/></svg>';
 const BACKARROW = '<svg width="21" height="21" viewBox="0 0 19 19" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 4.5 6.5 9.5l5 5"/></svg>';
 const SCALEMARK = '<svg width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" style="color:var(--sig)"><path d="M.5 8h14M3 8V4M7.5 8V2.5M12 8V5"/></svg>';
-const REVMARK = '<svg width="13" height="10" viewBox="0 0 13 10" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color:var(--tx3)"><path d="M12.5 1v2.5a2 2 0 0 1-2 2H1.5M4 3 1.5 5.5 4 8"/></svg>';
+const TABLEMARK = '<svg width="13" height="12" viewBox="0 0 13 12" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" style="color:var(--sig)"><path d="M.5 1.5h12M.5 5.5h12M.5 9.5h12M4.5 1.5v9"/></svg>';
+const REVMARK ='<svg width="13" height="10" viewBox="0 0 13 10" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color:var(--tx3)"><path d="M12.5 1v2.5a2 2 0 0 1-2 2H1.5M4 3 1.5 5.5 4 8"/></svg>';
 const dayMark = n => `<div class="mk mute">${String(n).padStart(3, "0")}</div>`;
 
-/* 文型例句裡出現當課單字就標起來。只做完全一致的比對，
-   活用後的形（記入して 之類）不標，寧可漏標也不要標錯位置。 */
+/* 例文の中の当課語彙を目立たせる。
+   内容側で【】を打ってあればそれを優先する（CONTENT-SPEC の書き方）。
+   打ち忘れがあっても拾えるよう、【】がない文だけ完全一致で拾う。
+   活用した形は拾わない。取りこぼすほうが、ずれた位置に色が付くよりまし。 */
 function markVocab(escaped, words) {
+  if (escaped.includes("【")) {
+    return escaped.replace(/【([^】]*)】/g, (_, w) => `<mark>${w}</mark>`);
+  }
   let out = escaped;
   words.slice().sort((a, b) => b.length - a.length).forEach(w => {
     if (!w) return;
@@ -126,6 +132,8 @@ function markVocab(escaped, words) {
 function cards(d) {
   const c = [{ t: "topic" }];
   d.patterns.forEach((p, i) => { c.push({ t: "pattern", i }); c.push({ t: "cons", i }); });
+  /* 対照表は文型のあと語彙の前。序章の数詞と日付の課だけが持つ */
+  (d.reference || []).forEach((r, i) => c.push({ t: "ref", i }));
   d.vocab.forEach((v, i) => c.push({ t: "vocab", i }));
   c.push({ t: "para" });
   (d.review || []).forEach((r, i) => c.push({ t: "review", i }));
@@ -259,6 +267,19 @@ function renderLesson() {
       <div class="h2" style="margin-top:8px;font-size:1.375rem">${esc(p.pattern)}</div>
       <ul class="cons">${(p.constraints || []).map(x => `<li>${bi(x)}</li>`).join("")}</ul>
       ${p.contrast ? `<div class="contrast">${bi(p.contrast)}</div>` : ""}`;
+  }
+  else if (c.t === "ref") {
+    const r = d.reference[c.i];
+    margin = dayMark(d.day) + TABLEMARK;
+    body = `<div class="lbl">対照表 ${c.i + 1} / ${d.reference.length}</div>
+      <div class="h2" style="margin-top:8px;font-size:1.375rem">${bi(r.title)}</div>
+      <div class="tblwrap"><table class="tbl">
+        <thead><tr>${r.cols.map(x => `<th>${esc(x)}</th>`).join("")}</tr></thead>
+        <tbody>${r.rows.map(row =>
+          `<tr>${row.map((x, i) => `<td${i === 0 ? ' class="k"' : ""}>${esc(x)}</td>`).join("")}</tr>`
+        ).join("")}</tbody>
+      </table></div>
+      <div class="hint" style="margin-top:16px">読み上げなくていい。眺めて、引っかかったところだけ拾う。</div>`;
   }
   else if (c.t === "vocab") {
     const v = d.vocab[c.i];

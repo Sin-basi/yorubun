@@ -168,6 +168,21 @@ ul.cons li::before{
 .lever p{font-size:1rem;line-height:1.95;color:var(--tx)}
 .lever em{font-style:normal;color:var(--sig);font-weight:600}
 
+/* ── 対照表（序章の数詞と日付だけが持つ） ───────── */
+.tblwrap{margin-top:18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tbl{border-collapse:collapse;width:100%;font-size:1rem}
+.tbl th{
+  font-family:var(--f-num);font-size:.72rem;font-weight:400;letter-spacing:.12em;
+  color:var(--tx3);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--rule2);
+  white-space:nowrap;
+}
+.tbl td{
+  padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);
+  color:var(--tx);line-height:1.6;white-space:nowrap;
+}
+.tbl td.k{font-family:var(--f-num);color:var(--sig);font-size:.9rem}
+.tbl tr:last-child td{border-bottom:none}
+
 /* ── 複習 ───────────────────────────────────────── */
 .q{font-family:var(--f-mi);font-size:1.5rem;line-height:1.9;margin-top:6px}
 .opts{margin-top:26px;display:flex;flex-direction:column;gap:11px}
