@@ -1,5 +1,35 @@
 # yorubun（夜文法）
 
+## GitHub Pages 現況（2026-08-06）
+
+repo 是 `https://github.com/Sin-basi/yorubun`，程式碼都在上面。
+**Pages 部署尚未成功，網站還沒活。**
+
+症狀：檔案上傳都成功（`upload-pages-artifact` 通過），
+卡在 `deploy-pages`，部署進了佇列就再也沒有任何狀態更新，
+十分鐘後逾時。三次嘗試、兩條不同部署路徑，結果相同。
+GitHub 狀態頁顯示全站正常，設定頁沒有任何錯誤橫幅。
+
+已確認正確的項目：repo 公開未封存、Actions 已啟用、
+`github-pages` 環境的分支政策含 `master`、預設分支 `master`、
+`.nojekyll` 已加、`index.html` 在根目錄且大小正確。
+
+**重試必須推新的 commit，不能只重跑工作流程。** Pages 的部署以
+commit SHA 當識別碼，前一次逾時中止時會把那個 SHA 的部署標成
+cancelled；同一個 SHA 再跑 `gh workflow run` 會在五秒內直接收到
+`Deployment cancelled.`，看起來像新錯誤，其實只是撞到已作廢的 SHA。
+
+所以重試方式是推一個新 commit（內容改什麼都行，空 commit 也可以）：
+
+```
+git commit --allow-empty -m "重新觸發 Pages 部署" && git push
+```
+
+若換了新 SHA 仍是十分鐘逾時，那就是 GitHub 端的部署佇列問題，
+找 GitHub Support，或確認帳號的主要 email 是否已驗證。
+在那之前手機端一律走下面的區網或離線方式，不擋開發。
+
+
 日文文法自學 PWA。規劃文件在 `V:\pm-lab\yorubun\`，
 產品事實在 `PRODUCT.md`，視覺系統在 `DESIGN.md`。
 
