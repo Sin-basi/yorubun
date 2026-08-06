@@ -52,35 +52,45 @@ gh api --method POST repos/Sin-basi/yorubun/pages/deployments/<SHA>/cancel
 產品事實在 `PRODUCT.md`，視覺系統在 `DESIGN.md`。
 
 目前狀態：**視覺原型**。`prototype.html` 一個檔，含兩課真實內容
-（序章第 1 課 品詞の地図、第 7 課 は と が）與三個深色方向。
+（序章第 1 課 品詞の地図、第 7 課 は と が）與兩個深色方向。
 還不是正式 app，沒有 service worker、沒有 localStorage、沒有 manifest。
+
+翻頁是**點畫面右半前進、左半後退**，左右滑動也可以。
 
 ## 在手機上看
 
-電腦端點兩下 `start-server.cmd`（或自己跑
-`python -m http.server 80 --bind 0.0.0.0`）。
+**手機走的是電信商行動數據，不在電腦的網段上，所以區網位址一律無效。**
+這件事踩過兩次，不要再提議 `http://10.1.1.12`。
 
-手機連同一個 Wi-Fi，用 Safari 開：
+Pages 還沒活，目前用 raw.githack 直接把 repo 裡的檔案當網頁送：
 
 ```
-http://10.1.1.12
+https://raw.githack.com/Sin-basi/yorubun/master/index.html
 ```
 
-**要連 `http://` 一起打**，只打 IP 的話 Safari 會當成搜尋關鍵字。
+實測回 200、`Content-Type: text/html`，Safari 正常算繪。
+網址參數照樣可用，例如 `?dir=hanshita&day=7&i=12&s=1`。
+推 commit 之後等一下就會更新。
 
-IP 若變了，用 `ipconfig` 查「乙太網路 2」的 IPv4 位址。
-`index.html` 是 `prototype.html` 的副本，改完原型要重新複製一次。
+`index.html` 是 `prototype.html` 的副本，**改完原型要重新複製再推**，
+不然 githack 拿到的還是舊的。
 
-連不到時依序檢查：手機是否在 Wi-Fi 而不是行動網路、手機端 VPN 是否關閉、
-網址是否含 `http://`。都對還是不行的話，用下面的離線方式。
+（statically.io 與 jsDelivr 不能用，它們把 `.html` 當 `text/plain` 送，
+Safari 會顯示原始碼。）
 
 ## 離線方式（完全不用網路）
 
 `prototype.html` 是單一自足檔案，沒有任何外部相依。
-用 AirDrop、郵件或 OneDrive 把它送到手機，存進「檔案」App，
+用 AirDrop、郵件或雲端硬碟送到手機，存進「檔案」App，
 點開就會用 Safari 的預覽渲染。
 
-已放一份在 `%USERPROFILE%\OneDrive\yorubun-prototype.html`。
+雲端硬碟放在 `G:\我的雲端硬碟\學習資料`。
+
+## 在電腦上看
+
+`start-server.cmd`（或 `python -m http.server 80 --bind 0.0.0.0`），
+然後開 `http://localhost/index.html?w=390`。`?w=` 可以把版面框到
+手機寬度，用來在電腦上檢查版型。這條路徑只給自己驗證用。
 
 ## 網址參數
 
@@ -88,7 +98,7 @@ IP 若變了，用 `ipconfig` 查「乙太網路 2」的 IPv4 位址。
 
 | 參數 | 值 | 說明 |
 |---|---|---|
-| `dir` | `keiki` / `hanshita` / `joyato` | 深色方向 |
+| `dir` | `hanshita` / `joyato` | 深色方向，預設 `joyato` |
 | `day` | `1` / `7` | 哪一課 |
 | `i` | 0 起算 | 直接跳到第幾張卡 |
 | `s` | `0` / `1` / `2` | 言い換えカード的三段 |

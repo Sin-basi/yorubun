@@ -7,7 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="夜文法">
-<meta name="theme-color" content="#0F1113">
+<meta name="theme-color" content="#191512">
 <title>夜文法 ｜ 視覺原型</title>
 <style>
 /* ── 三個深色方向 ───────────────────────────────── */
@@ -16,13 +16,6 @@
   --f-go:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",system-ui,sans-serif;
   --f-mi:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
   --f-num:ui-monospace,"SF Mono",Menlo,monospace;
-}
-[data-dir="keiki"]{
-  --bg:#0F1113; --bg2:#171A1D; --bg3:#1E2226;
-  --tx:#DDE2E4; --tx2:#8E969A; --tx3:#5D6569;
-  --sig:#E8A33D; --sig-dim:#7A5A26;
-  --rule:#272C30; --rule2:#343A3F;
-  --ok:#7FB2A0; --ng:#D2705F;
 }
 [data-dir="hanshita"]{
   --bg:#14161F; --bg2:#1C1F2B; --bg3:#242835;
@@ -85,7 +78,7 @@ body{
   display:flex; flex-direction:column; align-items:center; gap:9px;
   border-right:1px solid var(--rule);
 }
-.mk{font-family:var(--f-num); font-size:10.5px; letter-spacing:.03em; color:var(--sig)}
+.mk{font-family:var(--f-num); font-size:12px; letter-spacing:.03em; color:var(--sig)}
 .mk.mute{color:var(--tx3)}
 .mtick{width:10px;height:1px;background:var(--rule2)}
 .mtick.on{background:var(--sig)}
@@ -97,31 +90,31 @@ body{
 .inner.mid{margin:auto 0}
 
 /* ── 共通字體 ───────────────────────────────────── */
-.lbl{font-size:11px;letter-spacing:.14em;color:var(--tx3);font-family:var(--f-num)}
-.ja{font-family:var(--f-mi); font-size:19px; line-height:1.95; letter-spacing:.01em}
+.lbl{font-size:12.5px;letter-spacing:.14em;color:var(--tx3);font-family:var(--f-num)}
+.ja{font-family:var(--f-mi); font-size:22px; line-height:1.85; letter-spacing:.01em}
 .ja.go{font-family:var(--f-go)}
-.rd{font-size:12.5px;color:var(--tx3);line-height:1.7;margin-top:2px;font-family:var(--f-go)}
+.rd{font-size:14.5px;color:var(--tx3);line-height:1.7;margin-top:2px;font-family:var(--f-go)}
 [data-rd="0"] .rd{display:none}
-.zh{font-size:13.5px;color:var(--tx2);line-height:1.7;margin-top:4px}
-.zhx{display:block;font-size:13px;color:var(--tx2);line-height:1.8;margin-top:5px}
-.meta .zhx{font-size:12.5px;color:var(--tx3);margin-top:3px}
-.vwhen .zhx{font-size:12px;color:var(--tx3);margin-top:2px}
+.zh{font-size:15.5px;color:var(--tx2);line-height:1.7;margin-top:4px}
+.zhx{display:block;font-size:15px;color:var(--tx2);line-height:1.8;margin-top:5px}
+.meta .zhx{font-size:14.5px;color:var(--tx3);margin-top:3px}
+.vwhen .zhx{font-size:14px;color:var(--tx3);margin-top:2px}
 [data-zh="0"] .zhx{display:none}
 mark{background:none;color:var(--sig);font-weight:600}
 
 /* ── 卡片區塊 ───────────────────────────────────── */
-.h1{font-size:27px;line-height:1.4;font-weight:600;letter-spacing:.01em}
-.h2{font-size:22px;line-height:1.5;font-weight:600;font-family:var(--f-mi)}
-.intro{font-size:15px;color:var(--tx2);margin-top:14px;line-height:1.9;max-width:34em}
+.h1{font-size:31px;line-height:1.4;font-weight:600;letter-spacing:.01em}
+.h2{font-size:25.5px;line-height:1.5;font-weight:600;font-family:var(--f-mi)}
+.intro{font-size:17px;color:var(--tx2);margin-top:14px;line-height:1.9;max-width:34em}
 .meta{margin-top:18px;display:flex;flex-direction:column;gap:7px}
-.meta div{display:flex;gap:10px;font-size:13px;align-items:baseline}
-.meta b{font-weight:500;color:var(--tx3);flex-shrink:0;width:3.6em;font-size:11.5px;letter-spacing:.08em}
+.meta div{display:flex;gap:10px;font-size:15px;align-items:baseline}
+.meta b{font-weight:500;color:var(--tx3);flex-shrink:0;width:3.6em;font-size:13px;letter-spacing:.08em}
 .meta span{color:var(--tx2);line-height:1.7}
 .ex{margin-top:20px;display:flex;flex-direction:column;gap:16px}
 .ex li{list-style:none;padding-left:13px;border-left:1px solid var(--rule2)}
 ul.cons{margin-top:8px;display:flex;flex-direction:column;gap:11px}
 ul.cons li{
-  list-style:none;font-size:14px;color:var(--tx);line-height:1.8;
+  list-style:none;font-size:16px;color:var(--tx);line-height:1.8;
   padding-left:17px;position:relative;
 }
 ul.cons li::before{
@@ -129,20 +122,20 @@ ul.cons li::before{
 }
 .contrast{
   margin-top:20px;padding:14px 15px;background:var(--bg2);border-radius:var(--r-card);
-  font-size:14px;line-height:1.85;color:var(--tx2);
+  font-size:16px;line-height:1.85;color:var(--tx2);
 }
 .contrast em{font-style:normal;color:var(--tx);font-family:var(--f-mi)}
 
 /* ── 單字 ───────────────────────────────────────── */
 .word{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-.word .w{font-family:var(--f-mi);font-size:34px;line-height:1.3;letter-spacing:.02em}
+.word .w{font-family:var(--f-mi);font-size:39px;line-height:1.3;letter-spacing:.02em}
 .pos{
-  font-size:11px;letter-spacing:.1em;color:var(--sig);border:1px solid var(--sig-dim);
+  font-size:12.5px;letter-spacing:.1em;color:var(--sig);border:1px solid var(--sig-dim);
   padding:2px 7px;border-radius:3px;font-family:var(--f-go);white-space:nowrap;
 }
-.wr{font-size:14px;color:var(--tx3);margin-top:6px}
-.wz{font-size:17px;color:var(--tx);margin-top:12px}
-.note{margin-top:16px;font-size:13px;color:var(--tx2);line-height:1.8;padding-top:14px;border-top:1px solid var(--rule)}
+.wr{font-size:16px;color:var(--tx3);margin-top:6px}
+.wz{font-size:19.5px;color:var(--tx);margin-top:12px}
+.note{margin-top:16px;font-size:15px;color:var(--tx2);line-height:1.8;padding-top:14px;border-top:1px solid var(--rule)}
 
 /* ── 言い換え：刻度尺 ───────────────────────────── */
 .scale{margin:22px 0 6px;position:relative;padding-bottom:26px}
@@ -154,93 +147,111 @@ ul.cons li::before{
 }
 .scale .tick.on{background:var(--sig);transform:translateX(-50%) scaleY(1)}
 .scale .cap{
-  position:absolute;top:14px;font-size:10px;color:var(--tx3);
+  position:absolute;top:14px;font-size:11.5px;color:var(--tx3);
   transform:translateX(-50%);white-space:nowrap;font-family:var(--f-go);
   transition:color .3s ease;
 }
 .scale .cap.on{color:var(--sig)}
 .intent{
-  font-size:15px;color:var(--tx2);line-height:1.85;
+  font-size:17px;color:var(--tx2);line-height:1.85;
   padding:14px 15px;background:var(--bg2);border-radius:var(--r-card);
 }
-.intent b{display:block;font-size:11px;letter-spacing:.14em;color:var(--tx3);
+.intent b{display:block;font-size:12.5px;letter-spacing:.14em;color:var(--tx3);
   font-family:var(--f-num);font-weight:400;margin-bottom:7px}
-.ask{margin-top:22px;font-size:16px;color:var(--sig);line-height:1.8}
-.hint{margin-top:9px;font-size:12.5px;color:var(--tx3)}
+.ask{margin-top:22px;font-size:18.5px;color:var(--sig);line-height:1.8}
+.hint{margin-top:9px;font-size:14.5px;color:var(--tx3)}
 .vlist{margin-top:22px;display:flex;flex-direction:column;gap:19px}
 .vitem{padding-left:14px;border-left:1px solid var(--rule2)}
 .vitem.anchor{border-left-color:var(--sig)}
 .vlist.slim{gap:13px}
-.vlist.slim .ja{font-size:17px;line-height:1.75}
-.vlvl{font-size:11px;letter-spacing:.1em;color:var(--sig);margin-bottom:5px;font-family:var(--f-go)}
-.vwhen{font-size:12px;color:var(--tx3);margin-top:5px;line-height:1.7}
+.vlist.slim .ja{font-size:19.5px;line-height:1.75}
+.vlvl{font-size:12.5px;letter-spacing:.1em;color:var(--sig);margin-bottom:5px;font-family:var(--f-go)}
+.vwhen{font-size:14px;color:var(--tx3);margin-top:5px;line-height:1.7}
 .lever{
   margin-top:24px;padding:16px 16px;background:var(--bg2);border-radius:var(--r-card);
 }
-.lever b{display:block;font-size:11px;letter-spacing:.14em;color:var(--sig);
+.lever b{display:block;font-size:12.5px;letter-spacing:.14em;color:var(--sig);
   font-family:var(--f-num);font-weight:400;margin-bottom:9px}
-.lever p{font-size:14px;line-height:1.95;color:var(--tx)}
+.lever p{font-size:16px;line-height:1.95;color:var(--tx)}
 .lever em{font-style:normal;color:var(--sig);font-weight:600}
 
 /* ── 複習 ───────────────────────────────────────── */
-.q{font-family:var(--f-mi);font-size:21px;line-height:1.9;margin-top:6px}
+.q{font-family:var(--f-mi);font-size:24px;line-height:1.9;margin-top:6px}
 .opts{margin-top:26px;display:flex;flex-direction:column;gap:11px}
 .opt{
   background:var(--bg2);border:1px solid var(--rule);color:var(--tx);
-  font-family:var(--f-mi);font-size:18px;padding:15px 17px;border-radius:10px;
+  font-family:var(--f-mi);font-size:20.5px;padding:15px 17px;border-radius:10px;
   text-align:left;cursor:pointer;width:100%;transition:border-color .2s ease,background .2s ease;
 }
+.opt{position:relative;z-index:2}
 .opt:active{background:var(--bg3)}
 .opt.ok{border-color:var(--ok);color:var(--ok)}
 .opt.ng{border-color:var(--ng);color:var(--ng)}
 .opt:disabled{cursor:default;opacity:1}
-.why{margin-top:18px;font-size:14px;line-height:1.85;color:var(--tx2)}
+.why{margin-top:18px;font-size:16px;line-height:1.85;color:var(--tx2)}
 
 /* ── 首頁與完了 ─────────────────────────────────── */
 .center{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 26px}
-.daynum{font-family:var(--f-num);font-size:12px;letter-spacing:.2em;color:var(--sig)}
-.big{font-family:var(--f-mi);font-size:38px;line-height:1.35;margin-top:12px;letter-spacing:.02em}
-.grp{font-size:13px;color:var(--tx3);margin-top:12px;letter-spacing:.06em}
+.daynum{font-family:var(--f-num);font-size:14px;letter-spacing:.2em;color:var(--sig)}
+.big{font-family:var(--f-mi);font-size:43.5px;line-height:1.35;margin-top:12px;letter-spacing:.02em}
+.grp{font-size:15px;color:var(--tx3);margin-top:12px;letter-spacing:.06em}
 
 /* ── 底部 ───────────────────────────────────────── */
 .foot{
   flex-shrink:0;display:flex;align-items:center;gap:14px;
   padding:14px 20px calc(14px + env(safe-area-inset-bottom));
 }
-.back{
-  background:none;border:none;padding:8px;margin:-8px;cursor:pointer;
-  color:var(--tx3);display:flex;line-height:0;
+.navhint{
+  display:flex;align-items:center;gap:5px;line-height:0;
+  font-family:var(--f-num);font-size:12px;color:var(--tx3);letter-spacing:.1em;
 }
-.back:disabled{opacity:.22}
-.count{font-family:var(--f-num);font-size:11px;color:var(--tx3);letter-spacing:.08em}
+.navhint span{line-height:1}
+.navhint.off{opacity:.22}
+.count{font-family:var(--f-num);font-size:12.5px;color:var(--tx3);letter-spacing:.08em}
 .spacer{flex:1}
 .btn{
   background:var(--sig);color:var(--bg);border:none;font-family:var(--f-go);
-  font-size:16px;font-weight:600;padding:15px 34px;border-radius:var(--r-card);
+  font-size:18.5px;font-weight:600;padding:15px 34px;border-radius:var(--r-card);
   cursor:pointer;letter-spacing:.04em;
 }
 .btn:active{filter:brightness(.9)}
 .btn.ghost{background:none;color:var(--tx2);border:1px solid var(--rule2);font-weight:400}
-.tapzone{position:absolute;inset:0;cursor:pointer;z-index:1}
+
+/* ── 左右分頁的點擊區。右半前進，左半後退 ───────── */
+.tapzone{position:absolute;top:0;bottom:0;width:50%;cursor:pointer;z-index:1}
+.tapzone.tprev{left:0}
+.tapzone.tnext{right:0}
 
 /* ── 原型控制列（正式版不會有） ─────────────────── */
 .proto{
   flex-shrink:0;border-top:1px solid var(--rule);background:var(--bg);
-  padding:10px 16px calc(10px + env(safe-area-inset-bottom));
-  display:flex;gap:7px;align-items:center;position:relative;z-index:3;
+  padding:12px 18px calc(12px + env(safe-area-inset-bottom));
+  display:flex;gap:16px;align-items:flex-end;position:relative;z-index:3;
 }
-.proto span{font-size:9.5px;color:var(--tx3);letter-spacing:.1em;font-family:var(--f-num);margin-right:2px}
-.proto button{
-  flex:1;background:var(--bg2);border:1px solid var(--rule);color:var(--tx2);
-  font-family:var(--f-go);font-size:12px;padding:9px 4px;border-radius:8px;cursor:pointer;
+.pgrp{display:flex;flex-direction:column;gap:7px;min-width:0}
+.pgrp.wide{flex:1}
+.pgrp>span{
+  font-size:9.5px;color:var(--tx3);letter-spacing:.16em;
+  font-family:var(--f-num);padding-left:1px;
 }
-.proto button.on{border-color:var(--sig);color:var(--sig)}
+.seg{
+  display:flex;background:var(--bg2);border:1px solid var(--rule);
+  border-radius:9px;overflow:hidden;
+}
+.seg button{
+  flex:1;min-width:0;background:none;border:none;border-left:1px solid var(--rule);
+  color:var(--tx3);font-family:var(--f-go);font-size:12.5px;letter-spacing:.02em;
+  padding:9px 10px;cursor:pointer;white-space:nowrap;
+  transition:color .2s ease,background .2s ease;
+}
+.seg button:first-child{border-left:none}
+.seg button.on{background:var(--bg3);color:var(--sig)}
 .fade{animation:fi .26s cubic-bezier(.16,1,.3,1)}
 @keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.fade{animation:none}}
 </style>
 </head>
-<body data-dir="keiki">
+<body data-dir="joyato">
 <!--
 THESIS: 一課是一張印刷指定紙，語感是一支有刻度的量尺。拒絕語言 app 的兩個既定長相：
 Duolingo 式的圓角遊戲化卡片，與 Anki 式的灰白極簡表單。
@@ -256,16 +267,18 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 -->
 <div class="wrap" id="app"></div>
 <div class="proto">
-  <span>方向</span>
-  <button data-d="keiki">計器</button>
-  <button data-d="hanshita">版下</button>
-  <button data-d="joyato">常夜灯</button>
-  <span style="margin-left:5px">課</span>
-  <button data-day="1">序1</button>
-  <button data-day="7">第7</button>
-  <span style="margin-left:5px">表示</span>
-  <button id="rdtog">かな</button>
-  <button id="zhtog">中文</button>
+  <div class="pgrp wide"><span>方向</span><div class="seg">
+    <button data-d="hanshita">版下</button>
+    <button data-d="joyato">常夜灯</button>
+  </div></div>
+  <div class="pgrp"><span>課</span><div class="seg">
+    <button data-day="1">序1</button>
+    <button data-day="7">第7</button>
+  </div></div>
+  <div class="pgrp"><span>表示</span><div class="seg">
+    <button id="rdtog">かな</button>
+    <button id="zhtog">中文</button>
+  </div></div>
 </div>
 <script>
 /* ══ 內容：真實課程資料，依 CONTENT-SPEC.md 的結構 ══ */
@@ -448,7 +461,7 @@ const DATA = {
 }};
 
 const LEVELS=["くだけた","普通","丁寧","改まった","格式"];
-const DIRS=["keiki","hanshita","joyato"];
+const DIRS=["hanshita","joyato"];
 const app=document.getElementById("app");
 let day=1,idx=0,stage=0,answered={};
 
@@ -463,7 +476,8 @@ function cards(d){
   return c;
 }
 const esc=s=>s.replace(/[&<]/g,m=>({"&":"&amp;","<":"&lt;"}[m]));
-const ARROW='<svg width="19" height="19" viewBox="0 0 19 19" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 4.5 6.5 9.5l5 5"/></svg>';
+const ARROW_L='<svg width="15" height="15" viewBox="0 0 19 19" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 4.5 6.5 9.5l5 5"/></svg>';
+const ARROW_R='<svg width="15" height="15" viewBox="0 0 19 19" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4.5 12.5 9.5l-5 5"/></svg>';
 const SCALEMARK='<svg width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" style="color:var(--sig)"><path d="M.5 8h14M3 8V4M7.5 8V2.5M12 8V5"/></svg>';
 const REVMARK='<svg width="13" height="10" viewBox="0 0 13 10" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color:var(--tx3)"><path d="M12.5 1v2.5a2 2 0 0 1-2 2H1.5M4 3 1.5 5.5 4 8"/></svg>';
 const dayMark=n=>`<div class="mk mute">${String(n).padStart(3,"0")}</div>`;
@@ -505,7 +519,7 @@ function render(){
     const p=d.patterns[c.i];
     margin=dayMark(d.day)+`<div class="mk">${p.id}</div><div class="mtick"></div><div class="mtick on"></div>`;
     body=`<div class="lbl">使用制限</div>
-      <div class="h2" style="margin-top:8px;font-size:19px">${esc(p.pattern)}</div>
+      <div class="h2" style="margin-top:8px;font-size:22px">${esc(p.pattern)}</div>
       <ul class="cons">${p.constraints.map(x=>`<li>${bi(x)}</li>`).join("")}</ul>
       <div class="contrast">${bi(p.contrast)}</div>`;
   }
@@ -569,11 +583,11 @@ function render(){
   else if(c.t==="done"){
     margin=dayMark(d.day);
     body=`<div class="daynum">第 ${String(d.day).padStart(3,"0")} 課　完了</div>
-      <div class="big" style="font-size:29px">${esc(d.unit)}</div>
+      <div class="big" style="font-size:33.5px">${esc(d.unit)}</div>
       <div style="margin-top:30px;display:flex;flex-direction:column;gap:13px">
       ${d.patterns.map(p=>`<div style="display:flex;gap:14px;align-items:baseline">
         <span class="lbl" style="width:2.2em;flex-shrink:0">${p.id}</span>
-        <span style="font-family:var(--f-mi);font-size:17px">${esc(p.pattern)}</span></div>`).join("")}
+        <span style="font-family:var(--f-mi);font-size:19.5px">${esc(p.pattern)}</span></div>`).join("")}
       </div>
       <div class="grp" style="margin-top:32px">明日：第 ${d.day+1} 課</div>`;
     tap=false;
@@ -582,21 +596,22 @@ function render(){
   }
 
   const total=seq.length;
-  if(!foot)foot=`<button class="back" id="back" ${idx===0?"disabled":""}>${ARROW}</button>
+  const canBack=idx>0||(c.t==="para"&&stage>0);
+  if(!foot)foot=`<div class="navhint${canBack?"":" off"}">${ARROW_L}<span>もどる</span></div>
+    <div class="spacer"></div>
     <div class="count">${String(idx+1).padStart(2,"0")} / ${String(total).padStart(2,"0")}</div>
     <div class="spacer"></div>
-    <div class="count" style="color:var(--tx3)">${c.t==="para"&&stage<2?"タップで続き":"タップで次へ"}</div>`;
+    <div class="navhint"><span>${c.t==="para"&&stage<2?"つづき":"すすむ"}</span>${ARROW_R}</div>`;
 
   app.innerHTML=railHTML(total,idx)+
     `<div class="stage"><div class="margin">${margin}</div>
      <div class="body"><div class="inner fade${c.t==="topic"||c.t==="done"?" mid":""}">${body}</div></div></div>
      <div class="foot">${foot}</div>`+
-    (tap?'<div class="tapzone" id="tz"></div>':"");
+    (tap?'<div class="tapzone tprev" id="tzp"></div><div class="tapzone tnext" id="tzn"></div>':"");
 
-  const tz=document.getElementById("tz");
-  if(tz)tz.onclick=()=>{ if(Date.now()-swipedAt>400)next(); };
-  const b=document.getElementById("back");
-  if(b)b.onclick=e=>{e.stopPropagation();prev()};
+  const tzp=document.getElementById("tzp"),tzn=document.getElementById("tzn");
+  if(tzp)tzp.onclick=()=>{ if(Date.now()-swipedAt>400)prev(); };
+  if(tzn)tzn.onclick=()=>{ if(Date.now()-swipedAt>400)next(); };
   app.querySelectorAll("[data-opt]").forEach(el=>el.onclick=e=>{
     e.stopPropagation();
     answered[day+"-"+cards(DATA[day])[idx].i]=+el.dataset.opt;render();
@@ -652,7 +667,7 @@ document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("[data-day]").forEach(x=>x.classList.toggle("on",x===b));
   render();
 });
-/* 網址參數：?dir=keiki|hanshita|joyato &day=1|7 &i=卡片序號 &s=言い換え段階 */
+/* 網址參數：?dir=hanshita|joyato &day=1|7 &i=卡片序號 &s=言い換え段階 */
 const qs=new URLSearchParams(location.search);
 const qd=qs.get("dir"); if(qd&&DIRS.includes(qd))document.body.dataset.dir=qd;
 const qw=+qs.get("w"); if(qw>=280&&qw<=560)document.documentElement.style.setProperty("--fw",qw+"px");
