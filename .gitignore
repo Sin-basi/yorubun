@@ -6,3 +6,6 @@ shots/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Claude Code 的本機權限設定，只屬於這台機器
+.claude/settings.local.json
