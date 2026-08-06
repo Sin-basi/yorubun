@@ -8,7 +8,7 @@
 
    VERSION は中身を変えたら必ず上げる。上げないと古い shell が残る。 */
 
-const VERSION = "v3";
+const VERSION = "v4";
 const SHELL = `yorubun-shell-${VERSION}`;
 const CONTENT = `yorubun-content-${VERSION}`;
 const META = "yorubun-meta";           // contentVersion の控えを置くだけ

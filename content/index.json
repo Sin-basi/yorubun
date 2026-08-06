@@ -1,5 +1,5 @@
 {
- "contentVersion": 3,
+ "contentVersion": 4,
  "totalDays": 172,
  "batches": [
   {
@@ -14,6 +14,13 @@
    "days": [
     8,
     14
+   ]
+  },
+  {
+   "file": "batch03.json",
+   "days": [
+    15,
+    21
    ]
   }
  ],
@@ -101,6 +108,48 @@
    "part": 1,
    "group": "第一部 ｜ 助詞",
    "unit": "の の用法"
+  },
+  {
+   "day": 15,
+   "part": 1,
+   "group": "第一部 ｜ 助詞",
+   "unit": "こそあど（一）"
+  },
+  {
+   "day": 16,
+   "part": 1,
+   "group": "第一部 ｜ 助詞",
+   "unit": "こそあど（二）"
+  },
+  {
+   "day": 17,
+   "part": 1,
+   "group": "第一部 ｜ 形式名詞",
+   "unit": "こと と の"
+  },
+  {
+   "day": 18,
+   "part": 1,
+   "group": "第一部 ｜ 形式名詞",
+   "unit": "こと の句型"
+  },
+  {
+   "day": 19,
+   "part": 1,
+   "group": "第一部 ｜ 形式名詞",
+   "unit": "もの"
+  },
+  {
+   "day": 20,
+   "part": 1,
+   "group": "第一部 ｜ 形式名詞",
+   "unit": "ところ"
+  },
+  {
+   "day": 21,
+   "part": 1,
+   "group": "第一部 ｜ 形式名詞",
+   "unit": "ところ の発展"
   }
  ]
 }
