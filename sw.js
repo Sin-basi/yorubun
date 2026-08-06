@@ -8,7 +8,7 @@
 
    VERSION は中身を変えたら必ず上げる。上げないと古い shell が残る。 */
 
-const VERSION = "v2";
+const VERSION = "v3";
 const SHELL = `yorubun-shell-${VERSION}`;
 const CONTENT = `yorubun-content-${VERSION}`;
 const META = "yorubun-meta";           // contentVersion の控えを置くだけ
@@ -54,7 +54,8 @@ self.addEventListener("activate", e => {
 });
 
 const isIndex = u => u.pathname.endsWith("/content/index.json");
-const isBatch = u => /\/content\/batch\d+\.json$/.test(u.pathname);
+/* batch と outline は cache first。contentVersion が上がったときだけ捨てる */
+const isBatch = u => /\/content\/(batch\d+|outline)\.json$/.test(u.pathname);
 
 /* index.json が新しくなっていたら、batch の cache をまとめて捨てる */
 async function dropStaleContent(freshResponse) {

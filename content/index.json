@@ -1,5 +1,5 @@
 {
- "contentVersion": 2,
+ "contentVersion": 3,
  "totalDays": 172,
  "batches": [
   {
@@ -7,6 +7,13 @@
    "days": [
     1,
     7
+   ]
+  },
+  {
+   "file": "batch02.json",
+   "days": [
+    8,
+    14
    ]
   }
  ],
@@ -52,6 +59,48 @@
    "part": 1,
    "group": "第一部 ｜ 助詞",
    "unit": "は と が（一）"
+  },
+  {
+   "day": 8,
+   "part": 1,
+   "group": "第一部 ｜ 助詞",
+   "unit": "は と が（二）"
+  },
+  {
+   "day": 9,
+   "part": 1,
+   "group": "第一部 ｜ 助詞",
+   "unit": "は と が（三）"
+  },
+  {
+   "day": 10,
+   "part": 1,
+   "group": "第一部 ｜ 助詞",
+   "unit": "を と に と で（一）"
+  },
+  {
+   "day": 11,
+   "part": 1,
+   "group": "第一部 ｜ 助詞",
+   "unit": "を と に と で（二）"
+  },
+  {
+   "day": 12,
+   "part": 1,
+   "group": "第一部 ｜ 助詞",
+   "unit": "に へ まで から"
+  },
+  {
+   "day": 13,
+   "part": 1,
+   "group": "第一部 ｜ 助詞",
+   "unit": "と や か とか"
+  },
+  {
+   "day": 14,
+   "part": 1,
+   "group": "第一部 ｜ 助詞",
+   "unit": "の の用法"
   }
  ]
 }

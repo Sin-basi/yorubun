@@ -298,6 +298,53 @@ ul.cons li::before{
 .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .btn.sm{font-size:.94rem;padding:11px 18px;border-radius:10px}
 
+/* ── 目次 ───────────────────────────────────────── */
+/* 172 行あるので、捲るのは文件そのもの。.sheet を捲る作りにすると
+   .wrap が min-height なぶん高さが決まらず、内側が捲れない。 */
+.tocview .bar,.tocview .chips{
+  position:sticky;background:var(--bg);z-index:5;
+}
+.tocview .bar{top:0;padding-top:calc(14px + env(safe-area-inset-top))}
+.tocview .chips{top:56px;box-shadow:0 8px 8px -8px var(--bg)}
+.chips{
+  flex-shrink:0;display:flex;gap:7px;padding:2px 20px 12px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+.chip{
+  background:var(--bg2);border:1px solid var(--rule);color:var(--tx3);
+  font-family:var(--f-go);font-size:.82rem;letter-spacing:.06em;
+  padding:0 14px;min-height:36px;border-radius:8px;cursor:pointer;white-space:nowrap;
+}
+.chip:active{border-color:var(--sig);color:var(--sig)}
+.sheet.toc{padding-top:0;overflow:visible;flex:none}
+.tpart{margin-top:26px}
+.tpart:first-child{margin-top:4px}
+.tph{
+  font-family:var(--f-num);font-size:.75rem;letter-spacing:.16em;color:var(--sig);
+  padding-bottom:9px;border-bottom:1px solid var(--rule2);
+}
+.tgh{
+  font-size:.85rem;color:var(--tx3);letter-spacing:.06em;
+  margin-top:20px;padding-bottom:4px;
+}
+.trow{
+  display:flex;gap:13px;align-items:baseline;width:100%;text-align:left;
+  background:none;border:none;border-top:1px solid var(--rule);
+  padding:11px 0;min-height:44px;cursor:pointer;color:inherit;font-family:var(--f-go);
+}
+.tgh + .trow{border-top:none}
+.trow:active{background:var(--bg2)}
+.trow.soon{cursor:default;opacity:.42}
+.trow.now .tu{color:var(--sig)}
+.tnum{
+  font-family:var(--f-num);font-size:.75rem;color:var(--tx3);
+  flex-shrink:0;width:2.4em;letter-spacing:.04em;
+}
+.tnum.done{color:var(--sig)}
+.tbody{min-width:0;display:block}
+.tu{display:block;font-family:var(--f-mi);font-size:1.06rem;line-height:1.5;color:var(--tx)}
+.th{display:block;font-size:.82rem;line-height:1.6;color:var(--tx3);margin-top:2px}
+
 /* ── 載入與錯誤 ─────────────────────────────────── */
 .state{flex:1;display:flex;flex-direction:column;justify-content:center;
   align-items:center;gap:14px;padding:0 30px;text-align:center;color:var(--tx3)}

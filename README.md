@@ -57,14 +57,18 @@ gh api --method POST repos/Sin-basi/yorubun/pages/deployments/<SHA>/cancel
 日文文法自學 PWA。規劃文件在 `V:\pm-lab\yorubun\`，
 產品事實在 `PRODUCT.md`，視覺系統在 `DESIGN.md`。
 
-目前狀態：**正式 app（Phase 2 完成），內容第一批七課到齊**。
-已有首頁、一課的卡片流、設定頁、localStorage 進度、
+目前狀態：**正式 app 完成，內容前兩批十四課到齊**。
+已有首頁、一課的卡片流、目次、設定頁、localStorage 進度、
 service worker 離線、manifest 與圖示。
 
 內容是序章六課（品詞の地図／紛らわしい品詞／数詞と助数詞／
-日付と時間と期間／文体の三軸 一・二）加第一部第 7 課（は と が）。
+日付と時間と期間／文体の三軸 一・二）加第一部助詞八課（第 7 到 14 課）。
 序章第 5、6 課建立語感座標軸，是後面每一張言い換えカード的前提。
 第 3、4 課帶對照表卡（助数詞的読み変化、日付の読み）。
+
+**目次**列出全部 172 課，依部與主題群分組，頂端有跳部的按鈕。
+已產出的課點得開，還沒寫的淡出顯示。從目次開的課是**只看不算數**，
+不會動到今天讀到哪裡，也不會被記成已完成。
 
 翻頁是**點畫面右半前進、左半後退**，左右滑動也可以。
 第一張卡按左半就回首頁 — standalone 沒有瀏覽器返回鍵，
@@ -80,7 +84,9 @@ sw.js                 service worker。改任何 shell 檔都要把 VERSION 加�
 manifest.webmanifest  PWA 資訊
 icons/                180 / 192 / 512，另有兩個 maskable
 content/index.json    課程總表。app 啟動只讀這份，toc 是「已產出的課」
-content/batch01.json  第一批七課的內容
+content/outline.json  172 課的完整目錄，目次畫面讀這份
+content/batch01.json  第一批七課（序章與第 7 課）
+content/batch02.json  第二批七課（助詞，第 8 到 14 課）
 content/vocab-used.txt 已用過的單字，產下一批時避免重複用的，app 不讀
 prototype.html        視覺原型的定格，不再跟著 app 走，留著對照用
 ```

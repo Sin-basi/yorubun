@@ -67,6 +67,7 @@ const today = () => {
 /* ══ 內容 ════════════════════════════════════════════════════ */
 
 let INDEX = null;               // content/index.json
+let OUTLINE = null;             // content/outline.json（172 課の目次。作った課かどうかは別）
 const BATCH = new Map();        // day -> 課物件
 
 async function loadIndex() {
@@ -84,6 +85,14 @@ async function loadDay(day) {
   (await r.json()).forEach(d => BATCH.set(d.day, d));
   if (!BATCH.has(day)) throw new Error("第 " + day + " 課尚未產出");
   return BATCH.get(day);
+}
+
+async function loadOutline() {
+  if (OUTLINE) return OUTLINE;
+  const r = await fetch("content/outline.json");
+  if (!r.ok) throw new Error("outline.json " + r.status);
+  OUTLINE = await r.json();
+  return OUTLINE;
 }
 
 /* toc 是「已經產出的課」的權威清單，沒產的課不會出現在裡面 */
@@ -143,10 +152,13 @@ function cards(d) {
 
 /* ══ 畫面狀態 ════════════════════════════════════════════════ */
 
-let view = "home";        // home | lesson | settings
+let view = "home";        // home | lesson | settings | toc
 let lesson = null;        // 目前這一課的內容物件
 let idx = 0, stage = 0;
 let answered = {};        // 這一輪的作答，key 是複習題序號
+/* 目次から開いたときは覗くだけ。進度も済んだ記録も一切書かない。
+   前の課を読み返しても、今日の位置がずれない。 */
+let peek = false;
 
 /* ══ 首頁 ════════════════════════════════════════════════════ */
 
@@ -199,10 +211,12 @@ function renderHome() {
     <div class="links">
       <button class="btn" id="go">${btn}</button>
       <div class="spacer"></div>
+      <button class="lnk" id="toc">目次</button>
       <button class="lnk" id="settings">設定</button>
     </div>`;
 
   document.getElementById("go").onclick = () => startLesson(day, resuming ? S.currentCard : 0);
+  document.getElementById("toc").onclick = () => { view = "toc"; render(); };
   document.getElementById("settings").onclick = () => { view = "settings"; render(); };
   const sk = document.getElementById("skip");
   if (sk) sk.onclick = () => { S.currentDay = nx; S.currentCard = 0; save(); startLesson(nx, 0); };
@@ -210,7 +224,7 @@ function renderHome() {
 
 /* ══ 一課 ════════════════════════════════════════════════════ */
 
-async function startLesson(day, at) {
+async function startLesson(day, at, asPeek) {
   renderState("読み込み中", "");
   try {
     lesson = await loadDay(day);
@@ -221,6 +235,7 @@ async function startLesson(day, at) {
   idx = Math.min(Math.max(at | 0, 0), seq.length - 1);
   stage = 0;
   answered = {};
+  peek = !!asPeek;
   view = "lesson";
   render();
 }
@@ -356,17 +371,19 @@ function renderLesson() {
         <span class="lbl" style="width:2.2em;flex-shrink:0">${esc(p.id)}</span>
         <span style="font-family:var(--f-mi);font-size:1.22rem">${esc(p.pattern)}</span></div>`).join("")}
       </div>
-      <div class="grp" style="margin-top:32px">${nxt ? `明日：第 ${nx} 課　${esc(nxt.unit)}` : "ここまでが今ある分"}</div>`;
+      <div class="grp" style="margin-top:32px">${peek
+        ? "目次から開いた分なので、進度は動かない。"
+        : (nxt ? `明日：第 ${nx} 課　${esc(nxt.unit)}` : "ここまでが今ある分")}</div>`;
     tap = false;
     foot = `<button class="btn ghost" id="again">もう一度</button><div class="spacer"></div>
-            <button class="btn" id="home">おわり</button>`;
+            <button class="btn" id="home">${peek ? "目次へ" : "おわり"}</button>`;
   }
 
   const total = seq.length;
   /* 第一枚で左を押したらホームへ戻る。standalone にはブラウザの戻るがないので、
      どの画面からも指一本で出られる道を必ず残す。 */
   const atStart = idx === 0 && stage === 0;
-  if (!foot) foot = `<div class="navhint">${ARROW_L}<span>${atStart ? "ホーム" : "もどる"}</span></div>
+  if (!foot) foot = `<div class="navhint">${ARROW_L}<span>${atStart ? (peek ? "目次" : "ホーム") : "もどる"}</span></div>
     <div class="spacer"></div>
     <div class="count">${String(idx + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}</div>
     <div class="spacer"></div>
@@ -391,9 +408,13 @@ function renderLesson() {
     render();
   });
   const ag = document.getElementById("again");
-  if (ag) ag.onclick = () => { idx = 0; stage = 0; answered = {}; S.currentCard = 0; save(); render(); };
+  if (ag) ag.onclick = () => {
+    idx = 0; stage = 0; answered = {};
+    if (!peek) { S.currentCard = 0; save(); }
+    render();
+  };
   const hm = document.getElementById("home");
-  if (hm) hm.onclick = finishLesson;
+  if (hm) hm.onclick = () => { if (peek) { view = "toc"; render(); } else finishLesson(); };
 }
 
 function finishLesson() {
@@ -410,7 +431,7 @@ function next() {
   if (c.t === "para" && stage < 2) { stage++; render(); return; }
   if (idx < seq.length - 1) {
     idx++; stage = 0;
-    if (!S.completed[lesson.day]) { S.currentDay = lesson.day; S.currentCard = idx; save(); }
+    if (!peek && !S.completed[lesson.day]) { S.currentDay = lesson.day; S.currentCard = idx; save(); }
     render();
   }
 }
@@ -420,11 +441,80 @@ function prev() {
   if (c.t === "para" && stage > 0) { stage--; render(); return; }
   if (idx > 0) {
     idx--; stage = seq[idx].t === "para" ? 2 : 0;
-    if (!S.completed[lesson.day]) { S.currentCard = idx; save(); }
+    if (!peek && !S.completed[lesson.day]) { S.currentCard = idx; save(); }
     render();
   } else {
-    view = "home"; render();
+    view = peek ? "toc" : "home"; render();
   }
+}
+
+/* ══ 目次 ════════════════════════════════════════════════════ */
+
+let tocScroll = 0;   // 課を覗いて戻ってきたとき、同じ位置に戻す
+
+async function renderToc() {
+  if (!OUTLINE) {
+    renderState("読み込み中", "");
+    try { await loadOutline(); }
+    catch (e) { return renderState("目次が読めない", String(e.message || e)); }
+  }
+  const ready = new Set(availableDays());
+
+  /* 部ごとにまとめ、その中を群で割る。172 課ぶんを一枚に流す */
+  let html = "", lastPart = -1, lastGroup = "";
+  for (const d of OUTLINE.days) {
+    if (d.part !== lastPart) {
+      if (lastPart !== -1) html += "</div>";
+      html += `<div class="tpart" id="part${d.part}"><div class="tph">${esc(OUTLINE.parts[d.part])}</div>`;
+      lastPart = d.part; lastGroup = "";
+    }
+    if (d.group !== lastGroup) {
+      html += `<div class="tgh">${esc(d.group.replace(/^.*｜\s*/, ""))}</div>`;
+      lastGroup = d.group;
+    }
+    const done = !!S.completed[d.day];
+    const has = ready.has(d.day);
+    const now = d.day === S.currentDay;
+    html += `<button class="trow${has ? "" : " soon"}${now ? " now" : ""}" ${has ? `data-day="${d.day}"` : "disabled"}>
+      <span class="tnum${done ? " done" : ""}">${String(d.day).padStart(3, "0")}</span>
+      <span class="tbody"><span class="tu">${esc(d.unit)}</span><span class="th">${esc(d.hint)}</span></span>
+    </button>`;
+  }
+  html += "</div>";
+
+  app.innerHTML = `
+    <div class="bar">
+      <button class="back" id="back">${BACKARROW}</button>
+      <h2>目次</h2>
+      <div class="spacer"></div>
+      <span class="count">${OUTLINE.totalDays} 課</span>
+    </div>
+    <div class="chips">${OUTLINE.parts.map((p, i) =>
+      `<button class="chip" data-part="${i}">${esc(p.split("　")[0])}</button>`).join("")}</div>
+    <div class="sheet toc" id="tocsheet">${html}
+      <div class="note-sm">薄い行はまだ書いていない課。書けたら自動で開くようになる。<br>
+      ここから開いた課は覗くだけで、今日どこまで読んだかは動かない。</div>
+    </div>`;
+
+  document.body.classList.add("tocview");
+  window.scrollTo(0, tocScroll);
+  /* 貼り付いた見出しの下に隠れないよう、その高さぶん手前で止める */
+  const stuck = () => document.querySelector(".bar").offsetHeight +
+    document.querySelector(".chips").offsetHeight;
+
+  document.getElementById("back").onclick = () => { view = "home"; render(); };
+  app.querySelectorAll("[data-part]").forEach(b => b.onclick = () => {
+    const el = document.getElementById("part" + b.dataset.part);
+    if (!el) return;
+    /* offsetTop は .wrap 基準になるので使わない。画面上の位置から絶対位置を出す。
+       アニメーションはカード送りの一つだけと決めてあるので、ここは一瞬で飛ぶ。 */
+    const top = el.getBoundingClientRect().top + window.scrollY - stuck() - 6;
+    window.scrollTo(0, Math.max(0, top));
+  });
+  app.querySelectorAll("[data-day]").forEach(b => b.onclick = () => {
+    tocScroll = window.scrollY;
+    startLesson(+b.dataset.day, 0, true);
+  });
 }
 
 /* ══ 設定 ════════════════════════════════════════════════════ */
@@ -558,10 +648,12 @@ function renderState(title, detail) {
 }
 
 function render() {
+  if (view !== "toc") document.body.classList.remove("tocview");
   if (view === "home") renderHome();
   else if (view === "lesson") renderLesson();
   else if (view === "settings") renderSettings();
-  window.scrollTo(0, 0);
+  else if (view === "toc") renderToc();   // 捲る位置は自分で戻す
+  if (view !== "toc") window.scrollTo(0, 0);
 }
 
 /* キーボードは机の上で確認するとき用。実機では使わない */
