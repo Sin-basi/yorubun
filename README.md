@@ -101,15 +101,19 @@ https://sin-basi.github.io/yorubun/
 **先安裝再開始讀**，主畫面 app 與 Safari 的儲存空間是分開的，
 在 Safari 累積的進度不會自己跟過去（要搬的話用設定頁的匯出匯入）。
 
-備援網址（Pages 又壞掉時用）：
+備援網址（Pages 又壞掉時用），**要釘 commit SHA**：
 
 ```
-https://raw.githack.com/Sin-basi/yorubun/master/index.html
+https://raw.githack.com/Sin-basi/yorubun/<SHA>/
 ```
 
-githack 也能跑整個 app，相對路徑、目錄根、service worker 都成立，
-branch 網址約一分鐘更新一次。statically.io 與 jsDelivr 不能用，
-它們把 `.html` 當 `text/plain` 送，Safari 會顯示原始碼。
+githack 能跑整個 app，相對路徑、目錄根、service worker 都成立。
+但 **branch 網址（`/master/`）不要用**：它的邊緣快取逐檔各自到期，
+實測出現過 app.js 已換新、app.css 與 content 還是舊的半新半舊狀態，
+多檔相依的 app 撞到會直接壞掉。`git log -1 --format=%h` 取 SHA。
+
+statically.io 與 jsDelivr 不能用，它們把 `.html` 當 `text/plain` 送，
+Safari 會顯示原始碼。
 
 ## 在電腦上看
 
