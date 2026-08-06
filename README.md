@@ -51,65 +51,89 @@ gh api --method POST repos/Sin-basi/yorubun/pages/deployments/<SHA>/cancel
 日文文法自學 PWA。規劃文件在 `V:\pm-lab\yorubun\`，
 產品事實在 `PRODUCT.md`，視覺系統在 `DESIGN.md`。
 
-目前狀態：**視覺原型**。`prototype.html` 一個檔，含兩課真實內容
-（序章第 1 課 品詞の地図、第 7 課 は と が）與兩個深色方向。
-還不是正式 app，沒有 service worker、沒有 localStorage、沒有 manifest。
+目前狀態：**正式 app（Phase 2 完成）**。已有首頁、一課的卡片流、
+設定頁、localStorage 進度、service worker 離線、manifest 與圖示。
+內容目前兩課（序章第 1 課 品詞の地図、第一部第 7 課 は と が）。
 
 翻頁是**點畫面右半前進、左半後退**，左右滑動也可以。
+第一張卡按左半就回首頁 — standalone 沒有瀏覽器返回鍵，
+每個畫面都留了 app 內的出口。
+
+## 檔案
+
+```
+index.html            殼，只有 head 與一個容器
+app.css               全部樣式。字級用 rem，根字級由設定頁控制
+app.js                全部邏輯。三個畫面：home / lesson / settings
+sw.js                 service worker。改任何 shell 檔都要把 VERSION 加一
+manifest.webmanifest  PWA 資訊
+icons/                180 / 192 / 512，另有兩個 maskable
+content/index.json    課程總表。app 啟動只讀這份，toc 是「已產出的課」
+content/batch01.json  第一批的課文內容
+prototype.html        視覺原型的定格，不再跟著 app 走，留著對照用
+```
+
+**`prototype.html` 已經不是 `index.html` 的來源了。** 以前兩個檔要
+互相複製，現在 app 是獨立的一套，原型只是當時的紀錄。
 
 ## 在手機上看
 
 **手機走的是電信商行動數據，不在電腦的網段上，所以區網位址一律無效。**
 這件事踩過兩次，不要再提議 `http://10.1.1.12`。
 
-Pages 還沒活，目前用 raw.githack 直接把 repo 裡的檔案當網頁送：
+Pages 還沒活，目前用 raw.githack 把 repo 裡的檔案當網站送：
 
 ```
 https://raw.githack.com/Sin-basi/yorubun/master/index.html
 ```
 
-實測回 200、`Content-Type: text/html`，Safari 正常算繪。
-網址參數照樣可用，例如 `?dir=hanshita&day=7&i=12&s=1`。
-推 commit 之後等一下就會更新。
-
-`index.html` 是 `prototype.html` 的副本，**改完原型要重新複製再推**，
-不然 githack 拿到的還是舊的。
+`app.css`、`app.js`、`content/*.json` 都是相對路徑，所以整個 app
+在這個網址底下是完整的，不只是單一頁面。推 commit 之後等一下就會更新。
 
 （statically.io 與 jsDelivr 不能用，它們把 `.html` 當 `text/plain` 送，
 Safari 會顯示原始碼。）
 
-## 離線方式（完全不用網路）
-
-`prototype.html` 是單一自足檔案，沒有任何外部相依。
-用 AirDrop、郵件或雲端硬碟送到手機，存進「檔案」App，
-點開就會用 Safari 的預覽渲染。
-
-雲端硬碟放在 `G:\我的雲端硬碟\學習資料`。
-
 ## 在電腦上看
 
 `start-server.cmd`（或 `python -m http.server 80 --bind 0.0.0.0`），
-然後開 `http://localhost/index.html?w=390`。`?w=` 可以把版面框到
-手機寬度，用來在電腦上檢查版型。這條路徑只給自己驗證用。
+然後開 `http://localhost/`。這條路徑只給自己驗證用。
+
+**改完檔案沒看到變化，先想 service worker。** 它把 shell 快取成
+cache first，這正是離線能用的原因，但開發時會擋住新版。
+瀏覽器 console 跑這段清乾淨再重整：
+
+```js
+(async()=>{for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();for(const k of await caches.keys())await caches.delete(k);location.reload()})()
+```
+
+正式改版時是把 `sw.js` 的 `VERSION` 加一，使用者端會自己換掉。
+
+## 設定與進度
+
+配色、假名、中文說明、字級都在設定頁，選了就存進 localStorage。
+進度也在同一個 key（`yorubun`），設定頁可以整包匯出成一段文字再貼回來。
+
+**加入主畫面的 app 與 Safari 的 localStorage 是兩個空間。**
+在 Safari 讀過的進度不會自動跟進主畫面 app，要用匯出匯入搬。
+所以首頁在還沒安裝時會一直提醒先加入主畫面。
+
+課程推進看的是完成與否，不是日曆。今天沒讀，明天打開還是同一課。
+今天讀完了，當天再打開會停在同一課（按鈕變「もう一度読む」）並預告
+明天那一課，想直接往下讀也有入口。
 
 ## 網址參數
 
-原型專用，正式版不會有。
+只剩 `prototype.html` 還吃這些，正式 app 沒有。
 
 | 參數 | 值 | 說明 |
 |---|---|---|
-| `dir` | `hanshita` / `joyato` | 深色方向，預設 `joyato` |
+| `dir` | `hanshita` / `joyato` | 深色方向 |
 | `day` | `1` / `7` | 哪一課 |
 | `i` | 0 起算 | 直接跳到第幾張卡 |
 | `s` | `0` / `1` / `2` | 言い換えカード的三段 |
-| `rd` | `0` / `1` | 読み假名顯示，預設開 |
-| `zh` | `0` / `1` | 說明的中文顯示，預設開 |
-| `w` | 280 到 560 | 把版面框到指定寬度，用來在電腦上預覽手機尺寸 |
-| `dbg` | `1` | 顯示版面量測值 |
+| `w` | 280 到 560 | 把版面框到指定寬度 |
 
 例：`prototype.html?dir=joyato&day=7&i=12&s=2&w=390`
-
-畫面底部有原型控制列，可以直接切方向、切課、開關假名。
 
 ## 截圖
 
