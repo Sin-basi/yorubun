@@ -1,20 +1,31 @@
 # yorubun（夜文法）
 
-## GitHub Pages 現況（2026-08-06）
+## GitHub Pages
 
-repo 是 `https://github.com/Sin-basi/yorubun`，程式碼都在上面。
-**Pages 部署尚未成功，網站還沒活。**
+網站活了，2026-08-06 15:xx 那次部署成功：
 
-症狀：檔案上傳都成功（`upload-pages-artifact` 通過），
-卡在 `deploy-pages`，部署進了佇列就再也沒有任何狀態更新，
-十分鐘後逾時。多次嘗試、兩條不同部署路徑，結果相同。
-GitHub 狀態頁顯示全站正常，設定頁沒有任何錯誤橫幅。
+```
+https://sin-basi.github.io/yorubun/
+```
 
-已確認正確的項目：repo 公開未封存、Actions 已啟用、
+repo 是 `https://github.com/Sin-basi/yorubun`。推上 master 就會自動部署，
+工作流程在 `.github/workflows/pages.yml`。
+
+### 之前卡了三小時，症狀與解法記在這裡
+
+症狀是檔案上傳都成功（`upload-pages-artifact` 通過），卡在 `deploy-pages`，
+部署進了佇列就再也沒有任何狀態更新，十分鐘後逾時。多次嘗試、
+兩條不同部署路徑，結果相同。GitHub 狀態頁顯示全站正常。
+
+**最後是它自己好的，我方沒有做對什麼。** 查證結果是 GitHub 平台的
+已知問題，community discussions #200809、#200817、#200854、#184211
+都是同一症狀，2026 年 7 月起多人回報，官方沒有確認原因也沒給解法。
+所以下次再遇到，先確認下面兩個坑清乾淨，然後就是等。
+
+我方已排除的項目（不用再查一遍）：repo 公開未封存、Actions 已啟用、
 `github-pages` 環境的分支政策含 `master`、預設分支 `master`、
-`.nojekyll` 已加、`index.html` 在根目錄且大小正確。
-工作流程本身也已排除嫌疑：`.github/workflows/pages.yml` 的權限、
-concurrency 與三個 action 版本都正確，每次都跑到建立部署那一步才卡。
+`.nojekyll` 已加、index.html 在根目錄、artifact 只有 43KB、
+工作流程的權限與 action 版本、**帳號主要 email 已驗證**。
 
 ### 排查過程留下的兩個坑
 
@@ -37,16 +48,11 @@ git commit --allow-empty -m "重新觸發 Pages 部署" && git push
 gh api --method POST repos/Sin-basi/yorubun/pages/deployments/<SHA>/cancel
 ```
 
-### 目前的結論
+兩個坑都清乾淨之後，部署還是逾時了幾次，再過大約一小時就自己通了。
+所以判斷「還在卡」的標準是：新 SHA、沒有 in-progress 擋著，仍然逾時。
+那就只能等，不必再動設定。
 
-上面兩個坑都清乾淨之後（2026-08-06 13:29 那次），部署建立得很乾淨、
-沒有任何阻擋，然後照樣在佇列裡躺滿十分鐘逾時。
-**所以這是 GitHub 端的佇列問題，repo 這邊沒有東西可以再調。**
-下一步只有兩條：等幾小時再推一次看佇列有沒有恢復，
-或找 GitHub Support（順便確認帳號主要 email 已驗證）。
-
-在 Pages 活起來之前，手機端走下面的區網或離線方式，不擋開發。
-
+---
 
 日文文法自學 PWA。規劃文件在 `V:\pm-lab\yorubun\`，
 產品事實在 `PRODUCT.md`，視覺系統在 `DESIGN.md`。
@@ -78,20 +84,26 @@ prototype.html        視覺原型的定格，不再跟著 app 走，留著對�
 
 ## 在手機上看
 
+```
+https://sin-basi.github.io/yorubun/
+```
+
 **手機走的是電信商行動數據，不在電腦的網段上，所以區網位址一律無效。**
 這件事踩過兩次，不要再提議 `http://10.1.1.12`。
 
-Pages 還沒活，目前用 raw.githack 把 repo 裡的檔案當網站送：
+用 Safari 開上面的網址，分享選單選「加入主畫面」。
+**先安裝再開始讀**，主畫面 app 與 Safari 的儲存空間是分開的，
+在 Safari 累積的進度不會自己跟過去（要搬的話用設定頁的匯出匯入）。
+
+備援網址（Pages 又壞掉時用）：
 
 ```
 https://raw.githack.com/Sin-basi/yorubun/master/index.html
 ```
 
-`app.css`、`app.js`、`content/*.json` 都是相對路徑，所以整個 app
-在這個網址底下是完整的，不只是單一頁面。推 commit 之後等一下就會更新。
-
-（statically.io 與 jsDelivr 不能用，它們把 `.html` 當 `text/plain` 送，
-Safari 會顯示原始碼。）
+githack 也能跑整個 app，相對路徑、目錄根、service worker 都成立，
+branch 網址約一分鐘更新一次。statically.io 與 jsDelivr 不能用，
+它們把 `.html` 當 `text/plain` 送，Safari 會顯示原始碼。
 
 ## 在電腦上看
 
