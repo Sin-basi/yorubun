@@ -1,0 +1,8 @@
+# 開發過程的截圖，不進 repo
+shots/
+
+# 編輯器與系統
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
