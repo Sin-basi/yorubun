@@ -28,6 +28,29 @@ KANJI = re.compile(r"[一-鿿]")
 fails = []
 warns = []
 
+# 打字時 IME 事故混入的異質文字。西里爾字母已經混進來兩次（рhone、там），
+# 全形文字裡夾半形英文單字也出過一次（competitor）。整包 JSON 掃一遍。
+CYRILLIC = re.compile(r"[Ѐ-ӿ]+")
+# 允許的片假名外來語常會寫成半形嗎？不會 — 內容全是日文，英文字母連續
+# 三個以上就可疑。單位與型號（2LDK、CH）是一兩個字母，放行。
+LATIN_WORD = re.compile(r"[A-Za-z]{3,}")
+
+
+def scan_foreign(obj, where):
+    if isinstance(obj, str):
+        m = CYRILLIC.search(obj)
+        if m:
+            bad(where, f"混入西里爾字母「{m.group()}」：{obj[:30]}")
+        m = LATIN_WORD.search(obj)
+        if m:
+            warn(where, f"連續英文字母「{m.group()}」：{obj[:30]}")
+    elif isinstance(obj, list):
+        for x in obj:
+            scan_foreign(x, where)
+    elif isinstance(obj, dict):
+        for v in obj.values():
+            scan_foreign(v, where)
+
 
 def bad(where, msg):
     fails.append(f"{where}: {msg}")
@@ -95,6 +118,7 @@ all_ex = {}
 for d in lessons:
     n = d["day"]
     w = f"day{n}"
+    scan_foreign(d, w)
     for k in ["day", "part", "group", "unit", "intro", "patterns", "vocab", "paraphrase", "review"]:
         if k not in d:
             bad(w, f"缺欄位 {k}")
