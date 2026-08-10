@@ -88,6 +88,9 @@ for b in idx["batches"]:
 
 seen_vocab = {}
 all_q = {}
+# 例文の使い回し検出。漢字か仮名かだけ違う書き換えも同じ文として扱いたいので、
+# reading（全部仮名）で突き合わせる。同じ文を別の課で出すと復習にならない。
+all_ex = {}
 
 for d in lessons:
     n = d["day"]
@@ -131,6 +134,10 @@ for d in lessons:
             plain = re.sub(r"[【】]", "", e["ja"])
             if not (7 <= len(plain) <= 48):
                 warn(pw, f"例句長度 {len(plain)}：{plain[:24]}")
+            key = re.sub(r"[、。？\s]", "", r)
+            if key in all_ex and all_ex[key] != n:
+                bad(pw, f"例句與 day{all_ex[key]} 重複：{plain[:24]}")
+            all_ex.setdefault(key, n)
     for m in marked:
         if m not in words:
             bad(w, f"【{m}】不在本課 vocab（標記只給當課語彙）")
