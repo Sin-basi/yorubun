@@ -11,6 +11,27 @@ https://sin-basi.github.io/yorubun/
 repo 是 `https://github.com/Sin-basi/yorubun`。推上 master 就會自動部署，
 工作流程在 `.github/workflows/pages.yml`。
 
+### 推完內容一定要驗線上，不要只看 push 成功
+
+2026-08-07 發現第二、三批內容推上去之後**一直沒有上線**。
+batch02 那次的 run 從 08-06 掛在 `waiting` 沒動，把後面的部署全部擋掉，
+batch03 直接被標成 `cancelled`。push 是成功的，站上卻還是第一批七課。
+
+```
+gh run list --limit 3 --json status,conclusion,displayTitle
+curl -s https://sin-basi.github.io/yorubun/content/index.json   # 看 contentVersion 與 toc 筆數
+```
+
+有 run 卡在 `waiting` 或 `in_progress` 超過十幾分鐘，就是它擋住後面：
+
+```
+gh run cancel <RUN_ID>
+gh api --method POST repos/Sin-basi/yorubun/pages/deployments/<完整 SHA>/cancel
+```
+
+SHA 要完整四十碼，用 `gh run view <ID> --json headSha --jq .headSha` 取。
+清掉之後排在後面的 run 會自己從 pending 轉 in_progress，不必重推。
+
 ### 之前卡了三小時，症狀與解法記在這裡
 
 症狀是檔案上傳都成功（`upload-pages-artifact` 通過），卡在 `deploy-pages`，
@@ -57,15 +78,17 @@ gh api --method POST repos/Sin-basi/yorubun/pages/deployments/<SHA>/cancel
 日文文法自學 PWA。規劃文件在 `V:\pm-lab\yorubun\`，
 產品事實在 `PRODUCT.md`，視覺系統在 `DESIGN.md`。
 
-目前狀態：**正式 app 完成，內容前三批二十一課到齊**（全 172 課）。
+目前狀態：**正式 app 完成，內容做到第 49 課**（全 172 課）。
 已有首頁、一課的卡片流、目次、設定頁、localStorage 進度、
 service worker 離線、manifest 與圖示。
 
-內容是序章六課（品詞の地図／紛らわしい品詞／数詞と助数詞／
-日付と時間と期間／文体の三軸 一・二）、第一部助詞十課（第 7 到 16 課）、
-形式名詞五課（第 17 到 21 課）。
+序章六課（品詞の地図／紛らわしい品詞／数詞と助数詞／日付と時間と期間／
+文体の三軸 一・二），第一部第 7 到 46 課（助詞、形式名詞、動詞のシステムと
+テンス、授受と依頼、受身と使役、敬語、副助詞與兩堂復習課），
+第二部第 47 課起進時間関係。
 序章第 5、6 課建立語感座標軸，是後面每一張言い換えカード的前提。
 第 3、4 課帶對照表卡（助数詞的読み変化、日付の読み）。
+復習課（第 45、46 課）的 `review` 是空陣列，app 會自動少產三張卡。
 
 **目次**列出全部 172 課，依部與主題群分組，頂端有跳部的按鈕。
 已產出的課點得開，還沒寫的淡出顯示。從目次開的課是**只看不算數**，
@@ -88,10 +111,30 @@ content/index.json    課程總表。app 啟動只讀這份，toc 是「已產�
 content/outline.json  172 課的完整目錄，目次畫面讀這份
 content/batch01.json  第一批七課（序章與第 7 課）
 content/batch02.json  第二批七課（助詞，第 8 到 14 課）
-content/batch03.json  第三批七課（こそあど與形式名詞，第 15 到 21 課）
+content/batchNN.json  一批七課（batch01 是第 1 到 7 課，之後每批往後七課）
 content/vocab-used.txt 已用過的單字，產下一批時避免重複用的，app 不讀
+check.py              自檢腳本，改完內容或 app 都跑一次，全綠才 commit
+sync.py               從 batch 檔重建 index.json 與 vocab-used.txt
 prototype.html        視覺原型的定格，不再跟著 app 走，留著對照用
 ```
+
+## 產完一批內容要做的事
+
+```
+python sync.py     # 重建 index.json 的 batches 與 toc、重寫 vocab-used.txt、contentVersion 加一
+python check.py    # 全綠才 commit
+```
+
+`sync.py` 加 `--no-bump` 就不動 contentVersion，修正既有內容時用。
+
+**內容更新只要 contentVersion，不必動 `sw.js` 的 `VERSION`。**
+service worker 讀 `index.json` 的 contentVersion 判斷要不要丟掉 content 快取，
+`VERSION` 只管 shell（index.html／app.css／app.js／manifest／icons）。
+
+check.py 判不動、只能自己看的三項：`reading` 逐句、例句自不自然、
+言い換えカード三個 variants 是不是同一件事。第三項最容易壞，
+尤其是**軸線汙染** — ぼかし軸的三句不可以同時把敬語層級也往上抬，
+否則分不清印象的改變是哪個因素造成的。
 
 **`prototype.html` 已經不是 `index.html` 的來源了。** 以前兩個檔要
 互相複製，現在 app 是獨立的一套，原型只是當時的紀錄。
