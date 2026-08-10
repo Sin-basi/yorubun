@@ -203,10 +203,27 @@ for q, days in all_q.items():
     if len(days) > 1:
         bad("review", f"複習題跨課重複（day{days}）：{q[:28]}")
 
-# ── 4. 摘要 ──────────────────────────────────────────────
+# ── 4. 言い換えの軸の配分 ────────────────────────────────
+# CONTENT-SPEC は「約八成用硬さ，其餘用ぼかし換口味」「避免整批同軸」。
+# 一批ぜんぶ硬さで書いてしまう事故が実際に起きたので、機械に見張らせる。
 ax = {}
 for d in lessons:
     ax[d["paraphrase"]["axis"]] = ax.get(d["paraphrase"]["axis"], 0) + 1
+soft = ax.get("ぼかし", 0)
+ratio = soft / len(lessons) if lessons else 0
+if lessons and not (0.12 <= ratio <= 0.28):
+    bad("軸の配分", f"ぼかし が全体の {ratio:.0%}。規格は約 20%（許容 12〜28%）")
+
+# 批ごとにも見る。七課まるごと同じ軸だと、その週は口味が変わらない。
+for b in idx["batches"]:
+    lo, hi = b["days"]
+    grp = [d for d in lessons if lo <= d["day"] <= hi]
+    if len(grp) < 5:
+        continue          # 途中まで書いた批はまだ判定しない
+    axes = {d["paraphrase"]["axis"] for d in grp}
+    if len(axes) == 1:
+        bad(b["file"], f"第 {lo} 到 {hi} 課が全部 {axes.pop()} 軸。一批に最低一つは別の軸を入れる")
+
 used = os.path.join(ROOT, "content", "vocab-used.txt")
 if os.path.exists(used):
     listed_words = [x for x in open(used, encoding="utf-8").read().split() if x]
@@ -217,7 +234,7 @@ print(f"課數 {len(lessons)} / {outline['totalDays']}"
       f"｜contentVersion {idx['contentVersion']}"
       f"｜單字 {len(seen_vocab)}"
       f"｜複習題 {sum(len(d['review']) for d in lessons)}"
-      f"｜軸 {ax}")
+      f"｜軸 {ax}（ぼかし {ratio:.0%}）")
 
 for x in warns:
     print("  warn  " + x)
