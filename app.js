@@ -146,8 +146,27 @@ function cards(d) {
   d.vocab.forEach((v, i) => c.push({ t: "vocab", i }));
   c.push({ t: "para" });
   (d.review || []).forEach((r, i) => c.push({ t: "review", i }));
+  /* 修了課だけが持つ。今までの複習の答えを読んで、弱いところを出す */
+  if (d.weakReport) c.push({ t: "weak" });
   c.push({ t: "done" });
   return c;
+}
+
+/* 複習の記録を fromDay ごとにまとめる。同じ課を何度読んでも
+   最後の一回だけを見る。読み返して直したぶんは弱点から外れる。 */
+function weakSpots() {
+  const last = {};
+  S.history.forEach(h => {
+    if (h.fromDay == null) return;
+    last[h.fromDay + "/" + h.qIndex] = h;
+  });
+  const agg = {};
+  Object.values(last).forEach(h => {
+    const a = agg[h.fromDay] || (agg[h.fromDay] = { day: h.fromDay, n: 0, x: 0 });
+    a.n++; if (!h.correct) a.x++;
+  });
+  return Object.values(agg).filter(a => a.x > 0)
+    .sort((p, q) => q.x - p.x || q.x / q.n - p.x / p.n || p.day - q.day);
 }
 
 /* ══ 畫面狀態 ════════════════════════════════════════════════ */
@@ -360,6 +379,29 @@ function renderLesson() {
         return `<button class="${cl}" data-opt="${i}" ${a !== undefined ? "disabled" : ""}>${esc(o)}</button>`;
       }).join("") + "</div>" +
       (a !== undefined ? `<div class="why">${bi(r.why)}</div>` : "");
+  }
+  else if (c.t === "weak") {
+    margin = dayMark(d.day);
+    const w = weakSpots(), top = w.slice(0, 8);
+    const done = Object.keys(S.completed).length;
+    body = `<div class="lbl">あなたの記録から</div>
+      <div class="h2" style="margin-top:8px;font-size:1.375rem">間違えた複習が指している課</div>`;
+    if (!S.history.length) {
+      body += `<div class="grp" style="margin-top:24px">複習の記録がまだありません。
+        目次から気になる課を開くと、そこから記録がたまっていきます。</div>`;
+    } else if (!top.length) {
+      body += `<div class="grp" style="margin-top:24px">記録した ${S.history.length} 問に取りこぼしがありません。
+        弱点として出せる課がないので、目次を眺めて<em>思い出せない課</em>のほうを拾ってください。</div>`;
+    } else {
+      body += `<div style="margin-top:22px;display:flex;flex-direction:column;gap:11px">
+        ${top.map(a => { const t = tocOf(a.day); return `<div style="display:flex;gap:11px;align-items:baseline">
+          <span class="lbl" style="width:4.2em;flex-shrink:0">第 ${a.day} 課</span>
+          <span style="font-family:var(--f-mi);font-size:1.16rem;flex:1">${esc(t ? t.unit : "")}</span>
+          <span class="lbl" style="flex-shrink:0">${a.x} / ${a.n}</span></div>`; }).join("")}
+      </div>
+      <div class="hint" style="margin-top:20px">${done} 課ぶんの記録から。数字は
+        <em>間違えた数 / 出た数</em>。上から順に目次で開き直すと、外した理由のほうが先に戻ってくる。</div>`;
+    }
   }
   else if (c.t === "done") {
     margin = dayMark(d.day);
